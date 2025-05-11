@@ -1,0 +1,38 @@
+蚁剑：特征
+使用URL编解码；
+每个数据包前面都会包含@ini_set("display_errors", "0");@set_time_limit(0);这两个语句；
+请求中的User-Agent值是：antSword/*
+也有可能是：Mozilla/5.0 (Windows NT ) AppleWebKit/ (KHTML, like Gecko) Chrome/* Safari/
+请求中可以检测到的关键字：“eval””eVAL”
+请求体存在@ini_set(“display_errors”, “0”);@set_time_limit(0);（开头可能是菜刀或者是蚁剑）
+加密后的明显参数多数是_0x…=这种形式所以_0x开头的参数名，以及dirname、get_current_user函数的字眼（需要讲请求内容解密后判断），后面为加密数据的数据包可以鉴定为蚁剑的流量特征
+在命令执行时有目录标记[S]、[E]、[R]、[D]、等，说明已经拿到shell了（在执行系统命令）
+payload特征
+php assert、eval关键字执行,
+asp eval在jsp使用
+Java 同时会带有base64编码解码等字符特征
+
+哥斯拉：
+2.请求中的Accept头是
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8
+3.paylod特征：jsp会出现xc,pass字符和Java反射，base64加解码等特征，php，asp则为普通的一句话木马。
+4.还有响应，哥斯拉会响应三次，而且我认为还有一个地方需要注意的就是webshell连接，所以一般会设置长时间连接，所以connection这里会是keep-alive
+5.响应头中的Cache-Control头是
+Cache-Control: no-store, no-cache, must-revalidate
+
+冰蝎:
+1. User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0)
+like Gecko
+2. Accept:
+text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,i
+mage/apng,*/ *; q=0.8,application/signed-exchange;v=b3;q=0.9
+3. Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+4、部分3.0以后的子版本至4.0以后增加了referer参数,未尾文件名随机大小写
+提供了传输协议自定义的功能，让用户对流量的加密和解密进行自定义，实现流量加解密协议的去中心化。v4.0版本不再有连接密码的概念，自定义传输协议的算法就是连接密码。
+Accept字段（弱特征），通常是Accept: application/json, text/javascript, /; q=0.01 意思是浏览器可接受任何文件，但最倾向application/json 和 text/javascript。
+Content-Type字段（弱特征），通常是Content-type: Application/x-www-form-urlencoded
+与冰蝎的前述版本相似，进行请求时内置了十几个User-Agent头，每次请求时会随机选择其中的一个。
+连接的端口有一定的特征，冰蝎与webshell建立连接的同时，java也与目的主机建立tcp连接，每次连接使用本地端口在49700左右(就是比较大的端口)，每连接一次，每建立一次新的连接，端口就依次增加。
+使用长连接，避免了频繁的握手造成的资源开销。默认情况下，请求头和响应头里会带有 Connection：Keep-Alive
+有固定的请求头和响应头，请求字节头：dFAXQV1LORcHRQtLRlwMAhwFTAg/M ，响应字节头：TxcWR1NNExZAD0ZaAWMIPAZjH1BFBFtHThcJSlUXWEd
+默认时，冰蝎 webshell都有“e45e329feb5d925b” 一串密钥，与冰蝎3.0相同。
