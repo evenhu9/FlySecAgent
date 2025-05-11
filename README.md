@@ -11,8 +11,17 @@
 - **流式输出**: AI的回答可以流式输出，提供更好的用户体验。
 - **知识库增强 (可选)**: 支持通过本地知识库Rag（`knowledge_base_docs`目录）来增强AI的回答质量。
 - **可配置模型**: 支持配置不同的语言模型参数。
-![Uploading 屏幕截图 2025-05-11 154031.png…]()
+- 
+  **启动效果**
+![屏幕截图 2025-05-11 154031]( https://github.com/hnking-star/FlySecAgent/blob/main/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-11%20154031.png)
 
+  
+  **sqlmap调用效果**:
+
+  ![屏幕截图 2025-05-11 154031](https://github.com/hnking-star/FlySecAgent/blob/main/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-11%20162500.png)
+
+  ![屏幕截图 2025-05-11 154031](https://github.com/hnking-star/FlySecAgent/blob/main/images/360%E6%88%AA%E5%9B%BE20250511162615.png)
+  此外还可以调用dirsearch，nmap等工具
 
 ## 安装指南
 
@@ -28,7 +37,8 @@
     ```
     -   Windows:
         ```bash
-        .venv\Scripts\activate
+        .venv\Scripts\acti![屏幕截图 2025-05-11 154031](https://github.com/user-attachments/assets/3991c18f-9e01-41f0-8de2-963ff1d14a87)
+vate
         ```
     -   macOS/Linux:
         ```bash
@@ -82,6 +92,20 @@ agent/
 └── ... (其他脚本或配置文件)
 ```
 
+## 配置文件 (`.env`)
+```json
+BASE_URL=https://api.302.ai
+API_KEY=your_r_api_key
+MODEL_NAME=gpt-4o
+
+
+EMBEDDING_API_KEY=your_embedding_api_key
+OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+```
+上面对应的是所用模型api和key，下面对应的是embedding的key和url（使用阿里云的）
+
+
+
 ## 配置文件 (`mcp.json`)
 
 此文件用于定义AI助手可以连接和使用的MCP服务器。每个服务器条目应包含:
@@ -89,7 +113,9 @@ agent/
 -   `params`: 启动服务器所需的参数，通常包括 `command` 和 `args`。
 -   `cache_tools_list`: 是否缓存工具列表。
 
-**示例服务器配置**:
+**MCP示例服务器配置**:
+
+**stdio**
 ```json
 {
   "name": "tavily-search",
@@ -111,10 +137,19 @@ agent/
 ```
 请确保将示例中的路径和API密钥替换为您自己的配置。
 
-## 贡献指南
+**sse**
+```json
+{"name":"mcpname",
+      "url":"http://127.0.0.1:8009/sse"
+},
+```
 
-欢迎对此项目做出贡献！如果您有任何建议或发现任何问题，请随时提交 Issue 或 Pull Request。
 
-## 许可证
+## 知识库配置
+在knowledge_base_docs添加相应的文件即可
 
-本项目采用 [MIT 许可证](LICENSE)。"# FlySecAgent" 
+
+
+
+
+
