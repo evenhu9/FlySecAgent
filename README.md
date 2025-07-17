@@ -13,8 +13,8 @@
 - **可配置模型**: 支持配置不同的语言模型参数。
 - 
   **启动效果**
-![屏幕截图 2025-05-11 154031]( https://github.com/hnking-star/FlySecAgent/blob/main/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-11%20154031.png)
-
+  
+  ![屏幕截图 2025-05-11 154031](https://github.com/user-attachments/assets/3991c18f-9e01-41f0-8de2-963ff1d14a87)
   
   **sqlmap调用效果**:
 
@@ -39,9 +39,7 @@
         ```bash
         .venv\Scripts\activate
         ```
-        
-![屏幕截图 2025-05-11 154031](https://github.com/user-attachments/assets/3991c18f-9e01-41f0-8de2-963ff1d14a87)
-        
+           
     -   macOS/Linux:
         ```bash
         source .venv/bin/activate
