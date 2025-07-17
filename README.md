@@ -37,9 +37,11 @@
     ```
     -   Windows:
         ```bash
-        .venv\Scripts\acti![屏幕截图 2025-05-11 154031](https://github.com/user-attachments/assets/3991c18f-9e01-41f0-8de2-963ff1d14a87)
-vate
+        .venv\Scripts\activate
         ```
+        
+![屏幕截图 2025-05-11 154031](https://github.com/user-attachments/assets/3991c18f-9e01-41f0-8de2-963ff1d14a87)
+        
     -   macOS/Linux:
         ```bash
         source .venv/bin/activate
