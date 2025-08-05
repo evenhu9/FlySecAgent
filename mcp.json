@@ -1,11 +1,44 @@
 {
   "servers": [
-    
+    {
+      "name": "sqlmap",
+      "params": {
+        "command": "node",
+        "args": [
+          "C:\\Users\\86138\\Documents\\scantools\\FlySecAgent\\CyberSecurity-MCPs\\implementations\\sqlmap-mcp\\build\\index.js"
+        ]
+      }
+    },
+    {
+      "name": "quake-server",
+      "params": {
+        "command": "node",
+        "args": [
+          "/path/to/quake-server/build/index.js"
+        ],
+        "env": {
+          "QUAKE_API_KEY": "xxxxxx-xxxx-xxxx-xxxx-xxxxxxx"
+        }
+      },
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    {
+      "name": "doc-processor",
+      "params": {
+        "command": "node",
+        "args": [
+          "/path/to/doc-processor/build/index.js"
+        ],
+        "disabled": false,
+        "alwaysAllow": []
+      }
+    },
     {
       "name": "fscan",
       "params": {
         "command": "uv",
-        "args": ["run", "--active", "F:\\ai\\mcp\\fscan\\fscan\\fscanss.py"],
+        "args": ["run", "--active", "C:\\Users\\86138\\Documents\\scantools\\FlySecAgent\\Fscan_mcp\\fscanss.py"],
         "env": {}
       },
       "cache_tools_list": true
@@ -14,39 +47,19 @@
       "name": "filesystem",
       "params": {
         "command": "C:\\Windows\\System32\\cmd.exe",
-        "args": ["/c", "npx", "-y","@modelcontextprotocol/server-filesystem","F:\\ai\\mcp"],
+        "args": ["/c", "npx", "-y","@modelcontextprotocol/server-filesystem","C:\\Users\\86138\\Documents\\scantools\\FlySecAgent"],
         "env": {}
       },
       "cache_tools_list": true
-    },
-    {
-      "name": "tavily-search",
-      "params": {
-       "command": "uv",
-      "args": [
-        "--directory",
-        "F:\\ai\\mcp\\mcp_tool\\mcp-server-tavily",
-        "run",
-        "tavily-search"
-      ],
-      "env": {
-        "TAVILY_API_KEY": "your_api_key",
-        "PYTHONIOENCODING": "utf-8"
-      }
-      }
-     
     },
     {
       "name": "fofa",
       "params": {
         "command": "uv",
-        "args": ["run", "--active", "F:\\ai\\mcp\\fofamcp\\fofa\\fofa.py"],
+        "args": ["run", "--active", "C:\\Users\\86138\\Documents\\scantools\\FlySecAgent\\fofa_MCP\\fofa.py"],
         "env": {}
       },
       "cache_tools_list": true
     }
-    
-    
-
   ]
 }
