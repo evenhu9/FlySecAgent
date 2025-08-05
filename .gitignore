@@ -1,0 +1,17 @@
+*.pyc
+__pycache__/
+.venv/
+.env
+build/
+*.log
+node_modules/
+.vscode/
+.pytest_cache/
+*.tmp
+*.swp
+.DS_Store
+CyberSecurity-MCPs/
+dirsearch/
+fofa_MCP/
+Fscan_mcp/
+ai/

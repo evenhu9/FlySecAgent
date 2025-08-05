@@ -4,9 +4,10 @@ import re
 import asyncio
 import threading
 import traceback
+import time
 from colorama import init, Fore, Back, Style
 from ollama import chat,Message
-
+from typing import Sequence
 
 init(autoreset=True)
 
@@ -22,16 +23,7 @@ ASCII_TITLE = f"""
 """
 
 # 导入Agent相关模块
-from agents import (
-    Agent,
-    Model,
-    ModelProvider,
-    OpenAIChatCompletionsModel,
-    RunConfig,
-    Runner,
-    set_tracing_disabled,
-    ModelSettings
-)
+from agents import Agent,Model,ModelProvider,OpenAIChatCompletionsModel,RunConfig,Runner,set_tracing_disabled,ModelSettings
 from openai import AsyncOpenAI  # OpenAI异步客户端
 from openai.types.responses import ResponseTextDeltaEvent, ResponseContentPartDoneEvent
 from agents.mcp import MCPServerStdio  # MCP服务器相关
@@ -45,7 +37,7 @@ load_dotenv()
 # 设置API相关环境变量
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv("BASE_URL")
-MODEL_NAME = os.getenv("MODEL_NAME")
+MODEL_NAME = os.getenv("MODEL_NAME") or "gpt-4o"  # 默认模型名称为gpt-4o
 
 # 检查环境变量是否设置
 if not API_KEY:
@@ -75,7 +67,7 @@ class DeepSeekModelProvider(ModelProvider):
 model_provider = DeepSeekModelProvider()
 
 # 修改 run_agent 函数，使其接受已连接的服务器列表和对话历史作为参数
-async def run_agent(query: str, mcp_servers: list[MCPServerStdio], history: list[dict] = None, streaming: bool = True, kb_instance=None):
+async def run_agent(query: str, mcp_servers: Sequence[MCPServerStdio], history: list[dict] = [], streaming: bool = True, kb_instance=None):
     """
     使用已连接的MCP服务器运行网络安全agent，支持流式输出和对话历史记忆。
 
@@ -121,15 +113,14 @@ async def run_agent(query: str, mcp_servers: list[MCPServerStdio], history: list
         secure_agent = Agent(
             name="网络安全专家",
             instructions=base_instructions,
-            mcp_servers=mcp_servers,  # 使用传入的列表
+            mcp_servers=list(mcp_servers),  # 转换为list以匹配类型要求
             model_settings=ModelSettings(
                 temperature=0.6,
                 top_p=0.9,
-                max_tokens=20000,
+                max_tokens=4096,
                 tool_choice="auto",
                 parallel_tool_calls=True,
                 truncation="auto",
-               
             )
         )
 
@@ -143,8 +134,7 @@ async def run_agent(query: str, mcp_servers: list[MCPServerStdio], history: list
                 run_config=RunConfig(
                     model_provider=model_provider,
                     trace_include_sensitive_data=True,
-                    handoff_input_filter=None,
-                   # tool_timeout=300
+                    handoff_input_filter=None
                 )
             )
 
@@ -193,11 +183,21 @@ async def run_agent(query: str, mcp_servers: list[MCPServerStdio], history: list
                                         else:
                                             output_text = json.dumps(output_data, ensure_ascii=False, indent=2)
                                 except json.JSONDecodeError:
-                                    output_text = f"无法解析的JSON输出: {output}"  # Add specific error if JSON parsing fails
+                                    output_text = f"无法解析的JSON输出: {output}"
                             else:
                                 output_text = str(output)
 
                             print(f"\n{Fore.GREEN}工具调用{tool_id} 返回结果: {output_text}{Style.RESET_ALL}", flush=True)
+
+                            # 新增SQL注入检测逻辑
+                            if "存在 SQL 注入漏洞"or "存在SQL注入漏洞" in output_text:
+                                current_time = time.strftime("%m%d_%H%M", time.localtime())
+                                filename = f"response_{current_time}.txt"
+                                # 保存响应内容
+                                with open(filename, 'w', encoding='utf-8') as f:
+                                    f.write(output_text)
+                                print(f"{Fore.YELLOW}响应已保存到 {filename}{Style.RESET_ALL}")
+            
             except Exception as e:
                 print(f"{Fore.RED}处理流式响应事件时发生错误: {e}{Style.RESET_ALL}", flush=True)
                 if 'Connection error' in str(e):
@@ -208,7 +208,6 @@ async def run_agent(query: str, mcp_servers: list[MCPServerStdio], history: list
                     print(f"{Fore.YELLOW}4. 尝试重新连接...{Style.RESET_ALL}")
                     await asyncio.sleep(100)  # 等待10秒后重试
                     try:
-                        await client.connect()
                         print(f"{Fore.GREEN}重新连接成功{Style.RESET_ALL}")
                     except Exception as e:
                         print(f"{Fore.RED}重新连接失败: {e}{Style.RESET_ALL}")
@@ -262,14 +261,14 @@ async def main():
                         name=server['name'],
                         params=server['params'],
                         cache_tools_list=server.get('cache_tools_list', True),
-                        client_session_timeout_seconds=300 #延迟时间变成300秒
+                        client_session_timeout_seconds=120 #延迟时间变成120秒
                     )
                 elif 'url' in server:
                     mcp_server = MCPServerSse(
                         params={"url": server["url"]},
                         cache_tools_list=server.get('cache_tools_list', True),
                         name=server['name'],
-                        client_session_timeout_seconds=300 #延迟时间变成300秒
+                        client_session_timeout_seconds=120 #延迟时间变成300秒
                     )
                 else:
                     print(f"{Fore.RED}未知的MCP服务器配置: {server}{Style.RESET_ALL}")

@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 设置numpy打印选项，显示完整数组
-np.set_printoptions(threshold=np.inf)
+np.set_printoptions(threshold=None)
 
 client = OpenAI(
     api_key=os.getenv("EMBEDDING_API_KEY"),  # 从环境变量读取Embedding API密钥

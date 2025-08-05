@@ -7,7 +7,7 @@ setlocal
 :: 检查Python是否安装
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo Python未安装，请先安装Python
+    echo "Python未安装，请先安装Python"
     pause
     exit /b 1
 )
@@ -19,7 +19,7 @@ pip show openai >nul 2>&1 || pip install openai
 
 :: 安装uv工具
 pip install uv 2>nul || (
-    echo 安装uv失败，正在尝试其他方式安装...
+    echo "安装uv失败，正在尝试其他方式安装..."
     python -m pip install uv
 )
 
@@ -27,7 +27,7 @@ pip install uv 2>nul || (
 set PYTHONPATH=.
 set PYTHONIOENCODING=utf-8
 :: 使用uv运行程序
-echo 正在启动网络安全智能系统...
+echo "正在启动网络安全智能系统..."
 uv run main.py
 if errorlevel 1 (
    

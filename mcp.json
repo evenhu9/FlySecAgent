@@ -14,10 +14,10 @@
       "params": {
         "command": "node",
         "args": [
-          "/path/to/quake-server/build/index.js"
+          "C:\\Users\\86138\\Documents\\scantools\\FlySecAgent\\CyberSecurity-MCPs\\implementations\\quake-server\\build\\index.js"
         ],
         "env": {
-          "QUAKE_API_KEY": "xxxxxx-xxxx-xxxx-xxxx-xxxxxxx"
+          "QUAKE_API_KEY": "your-quake-api-key"
         }
       },
       "disabled": false,
@@ -28,7 +28,7 @@
       "params": {
         "command": "node",
         "args": [
-          "/path/to/doc-processor/build/index.js"
+          "C:\\Users\\86138\\Documents\\scantools\\FlySecAgent\\CyberSecurity-MCPs\\implementations\\doc-processor\\build\\index.js"
         ],
         "disabled": false,
         "alwaysAllow": []
